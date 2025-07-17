@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  telegramId   BigInt        @unique
+  username     String?
+  firstName    String
+  lastName     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  vms          VM[]
+  transactions Transaction[]
+}
+
+model VM {
+  id           Int           @id @default(autoincrement())
+  name         String?
+  type         VMType
+  cpu          Int
+  ram          Int
+  disk         Int
+  price        Float
+  status       VMStatus      @default(pending)
+  userId       Int?
+  user         User?         @relation(fields: [userId], references: [id])
+  instanceId   String? // GCP instance ID
+  ipAddress    String?
+  region       String?
+  zone         String?
+  image        String?
+  sshKey       String?
+  rentedAt     DateTime?
+  expiresAt    DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+}
+
+model Transaction {
+  id              Int               @id @default(autoincrement())
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
+  vmId            Int?
+  vm              VM?               @relation(fields: [vmId], references: [id])
+  lamports        BigInt
+  paidFromAddress String?
+  vmStatus        String            @default("pending")
+  paidToAddress   String?
+  signature       String?
+  status          TransactionStatus @default(draft)
+  type            TransactionType
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  confirmedAt     DateTime?
+}
+
+model SolanaKeys {
+  id                Int      @id @default(autoincrement())
+  path              String
+  publicKey         String
+  encryptPrivateKey String
+  createdAt         DateTime @default(now())
+}
+
+enum TransactionStatus {
+  draft
+  pending
+  detected
+  confirmed
+  expired
+  failed
+}
+
+enum TransactionType {
+  payment
+  refund
+}
+
+enum VMStatus {
+  pending
+  active
+  suspended
+  terminated
+}
+
+enum VMType {
+  s
+  m
+  l
+}
