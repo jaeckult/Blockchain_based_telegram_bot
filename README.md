@@ -1,13 +1,6 @@
-# SolVM: Virtual Machine Rental with Solana Payments using
+![Uploading image.png…]()
 
-A Telegram bot that lets users rent Google Cloud Platform (GCP) virtual machines and pay with Solana (SOL) cryptocurrency.
-<br/>
-[**Try it now!**](https://solvmbot.vercel.app/)  
-<br/>
 This Project currenly works on Devnet. Make sure to change your Wallet RPC before payment.
-
-## Demo Video
-[![Demo Video](https://img.youtube.com/vi/rxWnLnO8p5w/0.jpg)](https://youtu.be/rxWnLnO8p5w)
 
 ## Project Overview
 
